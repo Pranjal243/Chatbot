@@ -15,7 +15,7 @@ const credentials = {
 
 const sessionClient = new dialogflow.SessionsClient({projectID,credentials});
 
-const sessionPath = sessionClient.sessionPath(projectId, sessionId);
+const sessionPath = sessionClient.sessionPath(projectID, sessionId);
 
 
 module.exports = {
