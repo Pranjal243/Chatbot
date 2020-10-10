@@ -3,7 +3,7 @@
 const dialogFlow = require('dialogflow');
 const structjsnon = require('./structjson');
 const config = require('../config/keys');
-//const { structProtoToJson } = require('./structjson');
+// const { structProtoToJson } = require('./structjson');
 
 const projectID = config.googleProjectID;
 
