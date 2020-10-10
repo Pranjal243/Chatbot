@@ -1,9 +1,11 @@
+'use strict'
+
 const chatbot = require('../chatbot/chatbot');
 
 module.exports = app => {
     
     app.get('/', (req,res) => {
-        res.send({'Hello': 'johny'});
+        res.send({'Hello': 'johny'})
     });
     
     app.post('/api/df_text_query', async(req,res) => {

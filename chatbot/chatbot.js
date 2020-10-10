@@ -1,20 +1,21 @@
 'use strict'
 
-const dialogFlow = require('dialogflow');
-const structjsnon = require('./structjson');
+const dialogflow = require('dialogflow');
+const structjson = require('./structjson.js');
 const config = require('../config/keys');
-// const { structProtoToJson } = require('./structjson');
 
 const projectID = config.googleProjectID;
+const sessionId = config.dialogFlowSessionID;
+const languageCode = config.dialogFlowSessionLanguageCode;
 
 const credentials = {
     client_email: config.googleClientEmail,
-    private_key: config.googlePrivateKey
+    private_key: config.googlePrivateKey,
 };
 
-const sessionClient = new dialogFlow.SessionsClient({projectID,credentials});
+const sessionClient = new dialogflow.SessionsClient({projectID,credentials});
 
-const sessionPath = sessionClient.sessionPath(config.googleProjectID,config.dialogFlowSessionID);
+const sessionPath = sessionClient.sessionPath(projectId, sessionId);
 
 
 module.exports = {
@@ -27,7 +28,7 @@ module.exports = {
                 // The query to send to the dialogflow agent
                 text: text,
                 // The language used by the client (en-US)
-                languageCode: config.dialogFlowSessionLanguageCode,
+                languageCode: languageCode,
               },
             },
             queryParams: {
@@ -36,8 +37,9 @@ module.exports = {
                 }
             }
           };
+
         let responses = await sessionClient.detectIntent(request);
-        responses = await self.handleAction(responses)
+        responses = await self.handleAction(responses);
         return responses;
     },
     eventQuery: async function(event, parameters = {}){
@@ -48,23 +50,18 @@ module.exports = {
               event: {
                 // The query to send to the dialogflow agent
                 name: event,
-                parameters: structjsnon.jsonToStructProto(parameters),
+                parameters: structjson.jsonToStructProto(parameters),
                 // The language used by the client (en-US)
-                languageCode: config.dialogFlowSessionLanguageCode,
+                languageCode: languageCode,
               },
-            },
-            queryParams: {
-                payload: {
-                    data: parameters
-                }
             }
           };
         let responses = await sessionClient.detectIntent(request);
-        responses = await self.handleAction(responses)
+        responses = await self.handleAction(responses);
         return responses;
     },
 
     handleAction: function(responses){
         return responses;
-    }
+    },
 }
