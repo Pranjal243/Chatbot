@@ -19,7 +19,4 @@ module.exports = app => {
         let responses = await chatbot.eventQuery(req.body.event, req.body.parameters);
         res.send(responses[0].queryResult);
     });    
-    catch((error) => {
-        assert.isNotOk(error,'Promise error');
-      });
 }
