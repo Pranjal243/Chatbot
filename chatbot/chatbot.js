@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const dialogflow = require('dialogflow');
 const structjson = require('./structjson.js');
@@ -15,19 +15,16 @@ const credentials = {
 
 const sessionClient = new dialogflow.SessionsClient({projectID,credentials});
 
-const sessionPath = sessionClient.sessionPath(projectID, sessionId);
-
 
 module.exports = {
-    textQuery: async function(text, parameters = {}){
+    textQuery: async function(text, userID,  parameters = {}){
         let self = module.exports;
+        const sessionPath = sessionClient.sessionPath(projectID, sessionId + userID);
         const request = {
             session: sessionPath,
             queryInput: {
               text: {
-                // The query to send to the dialogflow agent
                 text: text,
-                // The language used by the client (en-US)
                 languageCode: languageCode,
               },
             },
@@ -42,16 +39,16 @@ module.exports = {
         responses = await self.handleAction(responses);
         return responses;
     },
-    eventQuery: async function(event, parameters = {}){
+    eventQuery: async function(event, userID, parameters = {}){
         let self = module.exports;
+        let sessionPath = sessionClient.sessionPath(projectID, sessionId + userID);
+
         const request = {
             session: sessionPath,
             queryInput: {
               event: {
-                // The query to send to the dialogflow agent
                 name: event,
                 parameters: structjson.jsonToStructProto(parameters),
-                // The language used by the client (en-US)
                 languageCode: languageCode,
               },
             }
